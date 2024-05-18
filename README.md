@@ -5,6 +5,7 @@ The `.bashrc` file is a script that runs every time a new terminal session is st
 ### Initial Setup and System Checks
 
 - **Environment Checks**: The script checks if it is running in an interactive mode and sets up the environment accordingly.
+- **Required Applications**: You will need to make sure you install `curl`, `git` and `fastfetch` before running `setup.sh` script.
 - **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`). 
 - **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
   - You will need to create a directory in `./.config` within your user `/home` directory. You can do this through the command `mkdir fastfetch` and then copy the `config.jsonc` file to that new directory. This will customeze the fastfatch output.
@@ -23,7 +24,7 @@ The `.bashrc` file is a script that runs every time a new terminal session is st
 
 ### System-Specific Aliases and Settings
 
-- **Editor Settings**: Sets `nvim` (NeoVim) as the default editor.
+- **Editor Settings**: Sets `nano` (nano) as the default editor.
 - **Conditional Aliases**: Depending on the system type (like Fedora), it sets specific aliases, e.g., replacing `cat` with `bat`.
 
 ### Enhancements and Utilities
