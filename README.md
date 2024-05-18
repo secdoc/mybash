@@ -1,12 +1,14 @@
-## Overview of ChrisTitusTech's `.bashrc` Configuration
+## Overview of ChrisTitusTech's `.bashrc` Configuration - SECDOC Mod
 
 The `.bashrc` file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. Below is a summary of the key sections and functionalities defined in the provided `.bashrc` file.
 
 ### Initial Setup and System Checks
 
 - **Environment Checks**: The script checks if it is running in an interactive mode and sets up the environment accordingly.
-- **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`).
-
+- **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`). 
+- **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](#https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
+  - You will need to create a directory in your './.config' within your user '/home' directory. You can do this through the 'mkdir fastfetch' and then copy the 'config.jsonc' file  to that new directory.
+  - 
 ### Aliases and Functions
 
 - **Aliases**: Shortcuts for common commands are set up to enhance productivity. For example, `alias cp='cp -i'` makes the `cp` command interactive, asking for confirmation before overwriting files.
