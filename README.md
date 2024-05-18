@@ -7,7 +7,9 @@ The `.bashrc` file is a script that runs every time a new terminal session is st
 - **Environment Checks**: The script checks if it is running in an interactive mode and sets up the environment accordingly.
 - **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`). 
 - **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
-  - You will need to create a directory in your `./.config` within your user `/home` directory. You can do this through the `mkdir fastfetch` and then copy the `config.jsonc` file  to that new directory. This will customeze the fastfatch output.
+  - You will need to create a directory in `./.config` within your user `/home` directory. You can do this through the command `mkdir fastfetch` and then copy the `config.jsonc` file to that new directory. This will customeze the fastfatch output.
+
+ ![2024-05-18_15-18](https://github.com/secdoc/mybash/assets/55542561/69349022-0930-4206-a01c-4be2d15597e6)
 
 ### Aliases and Functions
 
