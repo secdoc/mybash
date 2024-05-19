@@ -109,6 +109,8 @@
             "type": "uptime",
             "key": "UPTIME: ",
             "keyColor": "blue"
-        }
+        },
+        "break",
+        "break"
     ]
 }
