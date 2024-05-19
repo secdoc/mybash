@@ -10,7 +10,8 @@ The `.bashrc` file is a script that runs every time a new terminal session is st
 - **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
   - You will need to create a directory in `./.config` within your user `/home` directory. You can do this through the command `mkdir fastfetch` and then copy the `config.jsonc` file to that new directory. This will customeze the fastfatch output.
 
- ![2024-05-18_15-18](https://github.com/secdoc/mybash/assets/55542561/69349022-0930-4206-a01c-4be2d15597e6)
+![image](https://github.com/secdoc/mybash/assets/55542561/8315cb21-1e5a-4241-a004-1f821f810d27)
+
 
 ### Aliases and Functions
 
