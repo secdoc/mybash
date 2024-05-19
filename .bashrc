@@ -58,7 +58,7 @@ alias pico='nano'
 alias spico='edit'
 alias nano='nano'
 alias snano='sedit'
-alias vim='vim'
+alias vim='nvim'
 
 # Replace batcat with cat on Fedora as batcat is not available as a RPM in any form
 if command -v lsb_release >/dev/null; then
