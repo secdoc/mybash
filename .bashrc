@@ -553,8 +553,8 @@ lazyg() {
 # Set the ultimate amazing command prompt
 #######################################################
 
-alias hug="hugo server -F --bind=10.0.0.97 --baseURL=http://10.0.0.97"
-bind '"\C-f":"zi\n"'
+# alias hug="hugo server -F --bind=10.0.0.97 --baseURL=http://10.0.0.97"
+# bind '"\C-f":"zi\n"'
 
 export PATH=$PATH:"$HOME/.local/bin:$HOME/.cargo/bin:/var/lib/flatpak/exports/bin:/.local/share/flatpak/exports/bin"
 
