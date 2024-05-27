@@ -9,6 +9,7 @@ The `.bashrc` file is a script that runs every time a new terminal session is st
 - **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`). 
 - **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
   - You will need to create a directory in `./.config` within your user `/home` directory. You can do this through the command `mkdir fastfetch` and then copy the `config.jsonc` file to that new directory. This will customize the fastfatch output.
+- **NerdFonts**: [Download NerdFonts](https://www.nerdfonts.com/font-downloads) to `[HOME DIRECTORY]/.local/share/fonts`.
 
 ![image](https://github.com/secdoc/mybash/assets/55542561/8315cb21-1e5a-4241-a004-1f821f810d27)
 
