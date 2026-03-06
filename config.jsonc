@@ -14,12 +14,21 @@
     "modules": [
         {
             "type": "title",
+            "key": "FAMILY: ",
+            "key": "NAME: ",
             "key": "HOST: ",
             "fqdn": true,
             "user": "green",
             "at": "green",
             "host": "green",
             "color": "green",
+            "keyColor": "green"
+        },
+        {
+            "type": "host",
+            "key": "FAMILY: ",
+            "key": "NAME: ",
+            "key": "HOST: ",
             "keyColor": "green"
         },
         {
