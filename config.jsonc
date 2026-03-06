@@ -58,6 +58,12 @@
             "keyColor": "green"
         },
         {
+            "type": "monitor",
+            "format": "{1}",
+            "format": "{2} x {3} ({11})", 
+            "keyColor": "green"
+        },
+        {
             "type": "localip",
             "key": "LOCAL IP: ",
             "compact": false,
@@ -77,6 +83,16 @@
         },        
         "break",
 
+        {
+            "type": "de",
+            "key": "DE: ",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "wm",
+            "key": "WM: ",
+            "keyColor": "yellow"
+        },
         {
             "type": "shell",
             "key": "SHELL: ",
