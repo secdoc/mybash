@@ -48,7 +48,7 @@
         },
         {
             "type": "memory",
-            "key": "Memory: ",
+            "key": "MEMORY: ",
             "keyColor": "green"
         },
         {
@@ -80,6 +80,12 @@
             "keyColor": "green"
         },
         {
+            "type": "netio",
+            "key": "IFNAME: ",
+            "format": "{ifname}",
+            "keyColor": "green"
+        },
+        {
             "type": "publicip",
             "key": "PUBLIC IP: ",
             "keyColor": "green"
@@ -89,7 +95,7 @@
             "key": "WIFI: ",
             "format": "{4}", // ssid
             "keyColor": "green"
-        },        
+        },      
         "break",
 
         {
@@ -100,6 +106,12 @@
         {
             "type": "wm",
             "key": "WM: ",
+            "keyColor": "yellow"
+        },
+        {
+            "type": "wmtheme",
+            "key": "WMTHEME: ",
+            "format": "{result}",
             "keyColor": "yellow"
         },
         {
