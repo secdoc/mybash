@@ -44,10 +44,10 @@
     <text x="425" y="161" fill="#EF802F" font-weight="700">CPU</text><text x="542" y="161" fill="#F7F7F7">AMD Ryzen 9 9950X (32) @ 5.76 GHz</text>
     <text x="425" y="185" fill="#EF802F" font-weight="700">GPU·I</text><text x="542" y="185" fill="#C4C4C4">AMD Radeon Graphics [Integrated]</text>
     <text x="425" y="209" fill="#EF802F" font-weight="700">GPU·D</text><text x="542" y="209" fill="#F7F7F7">NVIDIA GeForce RTX 5080 [Discrete]</text>
-    <text x="425" y="245" fill="#FFCC57" font-weight="700">DISK /</text><text x="542" y="245" fill="#C4C4C4">444.10 GiB / 1.79 TiB (<tspan fill="#EDF577">24%</tspan>) · ext4</text>
-    <text x="425" y="269" fill="#FFCC57" font-weight="700">/data</text><text x="542" y="269" fill="#C4C4C4">313.27 GiB / 3.58 TiB (<tspan fill="#EDF577">9%</tspan>) · ext4</text>
-    <text x="425" y="293" fill="#FFCC57" font-weight="700">/storage</text><text x="542" y="293" fill="#C4C4C4">2.71 TiB / 7.22 TiB (<tspan fill="#EDF577">38%</tspan>) · ext4</text>
-    <text x="425" y="317" fill="#FFCC57" font-weight="700">/recovery</text><text x="542" y="317" fill="#C4C4C4">3.34 GiB / 3.81 GiB (<tspan fill="#DB5192">88%</tspan>) · vfat</text>
+    <text x="425" y="245" fill="#FFCC57" font-weight="700">DISK (/)</text><text x="620" y="245" fill="#C4C4C4">444.10 GiB / 1.79 TiB (<tspan fill="#EDF577">24%</tspan>) · ext4</text>
+    <text x="425" y="269" fill="#FFCC57" font-weight="700">DISK (/mnt/data)</text><text x="620" y="269" fill="#C4C4C4">313.27 GiB / 3.58 TiB (<tspan fill="#EDF577">9%</tspan>) · ext4</text>
+    <text x="425" y="293" fill="#FFCC57" font-weight="700">DISK (/mnt/storage)</text><text x="620" y="293" fill="#C4C4C4">2.71 TiB / 7.22 TiB (<tspan fill="#EDF577">38%</tspan>) · ext4</text>
+    <text x="425" y="317" fill="#FFCC57" font-weight="700">DISK (/recovery)</text><text x="620" y="317" fill="#C4C4C4">3.34 GiB / 3.81 GiB (<tspan fill="#DB5192">88%</tspan>) · vfat</text>
     <text x="425" y="353" fill="#FFCC57" font-weight="700">MEMORY</text><text x="542" y="353" fill="#C4C4C4">33.33 GiB / 123.40 GiB (<tspan fill="#EDF577">27%</tspan>)</text>
     <text x="425" y="377" fill="#FFCC57" font-weight="700">SWAP</text><text x="542" y="377" fill="#C4C4C4">0 B / 16.00 GiB (<tspan fill="#EDF577">0%</tspan>)</text>
     <text x="425" y="401" fill="#FFCC57" font-weight="700">AUDIO</text><text x="542" y="401" fill="#C4C4C4">RODECaster Pro II Pro (<tspan fill="#EF802F">118%</tspan>)</text>
