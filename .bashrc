@@ -222,6 +222,14 @@ alias ping='ping -c 10'
 alias less='less -R'
 alias cls='clear'
 
+# Debian-family bat packages expose batcat; other platforms normally expose bat.
+# Disable paging so typing cat retains cat-like terminal and pipeline behavior.
+if command -v batcat >/dev/null 2>&1; then
+	alias cat='batcat --paging=never --style=plain'
+elif command -v bat >/dev/null 2>&1; then
+	alias cat='bat --paging=never --style=plain'
+fi
+
 if command -v trash-put >/dev/null 2>&1; then
 	alias rm='trash-put'
 elif command -v trash >/dev/null 2>&1; then
