@@ -336,15 +336,16 @@ ensure_login_profile_sources_bashrc() {
 		profile=$HOME/.profile
 	fi
 
-	if [ -f "$profile" ] && grep -Eq '(HOME\}?|~)/\.bashrc' "$profile"; then
+	if [ -f "$profile" ] && grep -Eq '^[[:space:]]*(\.|source)[[:space:]]+"?(\$\{?HOME\}?|~)/\.bashrc"?[[:space:]]*($|#)' "$profile"; then
 		return 0
 	fi
 
 	{
-		printf '\n# Source .bashrc for interactive bash shells\n'
-		printf '%s\n' "if [ -f \"\$HOME/.bashrc\" ]; then"
+		printf '\n# >>> mybash .bashrc >>>\n'
+		printf '%s\n' "if [ -n \"\${BASH_VERSION:-}\" ] && [ -f \"\$HOME/.bashrc\" ]; then"
 		printf '%s\n' ". \"\$HOME/.bashrc\""
 		printf 'fi\n'
+		printf '# <<< mybash .bashrc <<<\n'
 	} >>"$profile"
 	print_colored "$GREEN" "Updated $profile to source .bashrc in login shells"
 }
@@ -359,16 +360,14 @@ verify_interactive_cat_alias() {
 		return 1
 	fi
 
-	alias_output=$(bash --noprofile --rcfile "$HOME/.bashrc" -ic 'alias cat' 2>/dev/null || true)
-	case $alias_output in
-	*"$expected"*)
+	alias_output=$(bash --login -ic 'alias cat >&3' 3>&1 >/dev/null 2>/dev/null || true)
+	expected_output="alias cat='$expected'"
+	if [ "$alias_output" = "$expected_output" ]; then
 		print_colored "$GREEN" "Verified interactive cat alias: $expected"
-		;;
-	*)
+	else
 		print_colored "$RED" "The interactive cat alias was not loaded from $HOME/.bashrc."
 		return 1
-		;;
-	esac
+	fi
 }
 
 ensure_bash_profile_brew_shellenv() {
