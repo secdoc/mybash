@@ -1,7 +1,6 @@
 # SECDOC mybash (Linux/macOS)
 
-![SECDOC dense terminal theme](<img width="1027" height="578" alt="Screenshot_2026-08-29_14-15-43" src="https://github.com/user-attachments/assets/0bc24372-0359-40ec-9971-a75796517120" />
-)
+![SECDOC dense terminal theme](assets/secdoc-terminal.png)
 
 ## Overview
 
