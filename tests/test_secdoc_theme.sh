@@ -66,8 +66,8 @@ assert_contains uninstall.sh '.config/alacritty/alacritty.toml'
 assert_contains .bashrc 'export EDITOR=nano'
 assert_contains .bashrc 'export VISUAL=nano'
 assert_contains setup.sh 'apt-get install -y bash-completion bat'
-assert_contains .bashrc "alias cat='batcat --paging=never --style=plain'"
-assert_contains .bashrc "alias cat='bat --paging=never --style=plain'"
+assert_contains .bashrc "alias cat='batcat --paging=never --style=full'"
+assert_contains .bashrc "alias cat='bat --paging=never --style=full'"
 assert_contains .github/FUNDING.yml 'github: secdoc'
 assert_contains README.md 'https://github.com/secdoc/mybash.git'
 assert_contains README.md 'ChrisTitusTech/mybash'
@@ -85,7 +85,7 @@ cat
 EOF
 chmod +x "$BAT_TEST_DIR/batcat"
 bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
-[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "interactive cat did not invoke batcat directly: $bat_output"
+[[ $bat_output == $'args:--paging=never --style=full\npayload' ]] || fail "interactive cat did not invoke batcat directly: $bat_output"
 
 # The fallback uses bat when batcat is unavailable.
 BAT_FALLBACK_DIR="$TMPDIR/bat-fallback-test"
@@ -93,11 +93,28 @@ mkdir -p "$BAT_FALLBACK_DIR"
 cat >"$BAT_FALLBACK_DIR/bat" <<'EOF'
 #!/bin/sh
 printf 'args:%s\n' "$*"
-cat
+/bin/cat
 EOF
 chmod +x "$BAT_FALLBACK_DIR/bat"
-bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
-[[ $bat_fallback_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke bat fallback correctly: $bat_fallback_output"
+# Use only the fixture directory so a system batcat cannot mask the bat fallback.
+bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR" HOME="$TMPDIR" /bin/bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
+[[ $bat_fallback_output == $'args:--paging=never --style=full\npayload' ]] || fail "cat alias did not invoke bat fallback correctly: $bat_fallback_output"
+
+# A real interactive file read must render bat's visible decorations. Plain-text
+# content has no syntax grammar, so this checks the header and line-number grid
+# under a pseudo-terminal, matching `cat ping.txt` in an actual terminal.
+REAL_BAT=$(command -v batcat || command -v bat || true)
+[[ -n $REAL_BAT ]] || fail 'batcat/bat is required for the rendering contract'
+command -v script >/dev/null 2>&1 || fail 'script is required for the pseudo-terminal rendering contract'
+RENDER_HOME="$TMPDIR/render-home"
+mkdir -p "$RENDER_HOME/bin"
+ln -s "$REAL_BAT" "$RENDER_HOME/bin/$(basename "$REAL_BAT")"
+printf '%s\n' 'PING 192.168.88.1 (192.168.88.1)' '64 bytes from 192.168.88.1' >"$RENDER_HOME/ping.txt"
+render_output=$(TERM=xterm-256color PATH="$RENDER_HOME/bin:/usr/bin:/bin" HOME="$RENDER_HOME" \
+  script -qec "bash --noprofile --rcfile '$ROOT/.bashrc' -ic 'cat \"$RENDER_HOME/ping.txt\"'" /dev/null 2>/dev/null)
+[[ $render_output == *'ping.txt'* ]] || fail 'interactive cat rendering lacks the bat file header'
+[[ $render_output == *'1'*'PING 192.168.88.1'* ]] || fail 'interactive cat rendering lacks bat line numbers/grid'
+[[ $render_output == *$'\033['* ]] || fail 'interactive cat rendering lacks terminal color escapes'
 
 # Aliases do not expand in non-interactive Bash, and command cat bypasses them interactively.
 noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; printf payload | cat' bash "$ROOT/.bashrc" 2>/dev/null)
@@ -124,7 +141,7 @@ grep -Fq '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile" || fail 'Linux login profile
 # shellcheck disable=SC2016 # Match the literal profile command.
 [[ $(grep -Fc '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile") -eq 1 ]] || fail 'login profile sources .bashrc more than once'
 login_alias_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$LOGIN_HOME" bash --noprofile --norc -c '. "$1"; alias cat' bash "$LOGIN_HOME/.profile" 2>/dev/null)
-[[ $login_alias_output == "alias cat='batcat --paging=never --style=plain'" ]] || fail "generated login profile did not load the cat alias: $login_alias_output"
+[[ $login_alias_output == "alias cat='batcat --paging=never --style=full'" ]] || fail "generated login profile did not load the cat alias: $login_alias_output"
 assert_contains setup.sh "bash --login -ic 'alias cat >&3'"
 
 # Respect Bash profile precedence and recognize the common ${HOME}/.bashrc form.
@@ -171,7 +188,7 @@ EOF
 cat >"$VERIFY_HOME/bin/bash" <<'EOF'
 #!/bin/sh
 printf '%s\n' "$*" >"$HOME/bash-args"
-printf "%s\n" "alias cat='batcat --paging=never --style=plain'" >&3
+printf "%s\n" "alias cat='batcat --paging=never --style=full'" >&3
 EOF
 chmod +x "$VERIFY_HOME/bin/batcat" "$VERIFY_HOME/bin/bash"
 (
@@ -187,7 +204,7 @@ mkdir -p "$BAD_HOME/bin"
 cp "$VERIFY_HOME/bin/batcat" "$BAD_HOME/bin/batcat"
 cat >"$BAD_HOME/bin/bash" <<'EOF'
 #!/bin/sh
-printf "%s\n" "alias cat='notbatcat --paging=never --style=plain'" >&3
+printf "%s\n" "alias cat='notbatcat --paging=never --style=full'" >&3
 EOF
 chmod +x "$BAD_HOME/bin/bash"
 if (

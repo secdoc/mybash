@@ -352,9 +352,9 @@ ensure_login_profile_sources_bashrc() {
 
 verify_interactive_cat_alias() {
 	if command_exists batcat; then
-		expected="batcat --paging=never --style=plain"
+		expected="batcat --paging=never --style=full"
 	elif command_exists bat; then
-		expected="bat --paging=never --style=plain"
+		expected="bat --paging=never --style=full"
 	else
 		print_colored "$RED" "bat was installed, but neither batcat nor bat is available in PATH."
 		return 1
