@@ -1,44 +1,54 @@
-# $HOME/.config/alacritty/alacritty.toml
-# by Lester Nichols 2024.10.27
-
-# Alacritty now uses TOML formatting for its config files.
-# This is a simple example.
-
-# There are the specification here: https://github.com/alacritty/alacritty/blob/master/extra/man/alacritty.5.scd
-# It is not obvious how it translates to TOML. But it is extremely straightforward.
-
-# example: WINDOW, COLORS, etc. are tables, and should be represented as [window], [colors], respectively.
-# specifics of variables go under them. e.g.- look under "dynamic_padding" under-
-# https://github.com/alacritty/alacritty/blob/master/extra/man/alacritty.5.scd#window
-# write `dynamic_padding = true` (without backticks -`) under the table [window]
-# for variables with multiple values, use "dotted keys". Like setting `padding.x = 5` under [window].
-# This is simple. If not clear, do several trials and errors.
-
-# Below is my initial set-up. The TOML homepage (https://toml.io/en/v1.0.0) was very helpful in figuring this out. 
-# I put the file alacritty.toml in $HOME/.config/alacritty. However it can be kept anywhere among the places mentioned in
-# https://github.com/alacritty/alacritty/tree/master#configuration
+# SECDOC terminal profile for Alacritty
+# Dense geometry and the exact SECDOC semantic palette.
 
 [window]
-
-dimensions = { columns = 120, lines = 30 }
-
-opacity = 0.8
-
-padding = { x = 10, y = 10 }
-
+dimensions = { columns = 120, lines = 34 }
+opacity = 0.92
+padding = { x = 6, y = 4 }
+dynamic_padding = false
 decorations = "Full"
-
-decorations_theme_variant = "Dark" # "Light"
+decorations_theme_variant = "Dark"
 
 [font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+size = 11.0
+builtin_box_drawing = true
 
-normal.family = "Hack Nerd Font"
-bold.family = "Hack Nerd Font"
-italic.family = "Hack Nerd Font"
-bold_italic.family = "Hack Nerd Font"
+[colors.primary]
+background = "#161616"
+foreground = "#F7F7F7"
+dim_foreground = "#C4C4C4"
+bright_foreground = "#F7F7F7"
 
-size = 12.0
+[colors.cursor]
+text = "#161616"
+cursor = "#FFCC57"
 
-# Tip: for inspiration, look for values in the source code files of your favorite VS Code themes, and use the color picker in
-# Google to test colors before setting a value, or simply using an editor such as VS Code where colors are displayed in a 
-# small box when a HEX is detected by the editor.
+[colors.selection]
+text = "#161616"
+background = "#C4C4C4"
+
+# Fastfetch semantic roles: red=exception, green=healthy,
+# yellow=identity, magenta=warning, white=near-white.
+[colors.normal]
+black = "#161616"
+red = "#DB5192"
+green = "#EDF577"
+yellow = "#FFCC57"
+blue = "#555555"
+magenta = "#DB5192"
+cyan = "#C4C4C4"
+white = "#F7F7F7"
+
+[colors.bright]
+black = "#555555"
+red = "#EF802F"
+green = "#EDF577"
+yellow = "#FFCC57"
+blue = "#C4C4C4"
+magenta = "#DB5192"
+cyan = "#F7F7F7"
+white = "#F7F7F7"

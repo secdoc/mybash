@@ -1,53 +1,170 @@
-## Overview of ChrisTitusTech's `.bashrc` Configuration - SECDOC Mod
+# SECDOC mybash (Linux/macOS)
 
-The `.bashrc` file is a script that runs every time a new terminal session is started in Unix-like operating systems. It is used to configure the shell session, set up aliases, define functions, and more, making the terminal easier to use and more powerful. Below is a summary of the key sections and functionalities defined in the provided `.bashrc` file.
+![SECDOC dense terminal theme](assets/secdoc-terminal.png)
 
-### Initial Setup and System Checks
+## Overview
 
-- **Environment Checks**: The script checks if it is running in an interactive mode and sets up the environment accordingly.
-- **Required Applications**: You will need to make sure you install `curl`, `git`, `zoxide` and `fastfetch` before running `setup.sh` script.
-- **System Utilities**: It checks for the presence of utilities like `fastfetch`, `bash-completion`, and system-specific configurations (`/etc/bashrc`). 
-- **Fastfetch**: I do not recommend using the Ubuntu or Debian repos for security reasons, but rather [Github release page](https://github.com/fastfetch-cli/fastfetch/releases) and install the binary directly for your platform of choice.
-  - You will need to create a directory in `./.config` within your user `/home` directory. You can do this through the command `mkdir fastfetch` and then copy the `config.jsonc` file to that new directory. This will customize the fastfatch output.
-- **NerdFonts**: [Download NerdFonts](https://www.nerdfonts.com/font-downloads) to `[HOME DIRECTORY]/.local/share/fonts`.
+This is the SECDOC downstream distribution of [ChrisTitusTech/mybash](https://github.com/ChrisTitusTech/mybash). It tracks current upstream behavior while retaining SECDOC's nano preference, funding metadata, dense Fastfetch layout, Alacritty profile, and branded prompt. Upstream authorship and the MIT license are preserved.
 
-![image](https://github.com/secdoc/mybash/assets/55542561/8315cb21-1e5a-4241-a004-1f821f810d27)
+The default SECDOC presentation uses the Pop!_OS slash-and-76 ASCII logo in a high-density two-column Fastfetch layout. It reports host, hardware, storage, memory, audio, displays, network, COSMIC desktop, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
 
+## Table of Contents
 
-### Aliases and Functions
+- [Installation](#installation)
+- [Switching Color Palettes](#switching-color-palettes)
+- [Uninstallation](#uninstallation)
+- [Configuration Files](#configuration-files)
+  - [.bashrc](#bashrc)
+  - [starship.toml](#starshiptoml)
+  - [config.jsonc](#configjsonc)
+  - [alacritty.toml](#alacrittytoml)
+- [Key Features](#key-features)
+- [Advanced Functions](#advanced-functions)
+- [System-Specific Configurations](#system-specific-configurations)
+- [Conclusion](#conclusion)
 
-- **Aliases**: Shortcuts for common commands are set up to enhance productivity. For example, `alias cp='cp -i'` makes the `cp` command interactive, asking for confirmation before overwriting files.
-- **Functions**: Custom functions for complex operations like `extract()` for extracting various archive types, and `cpp()` for copying files with a progress bar.
+## Installation
 
-### Prompt Customization and History Management
+To install the `.bashrc` configuration, execute the following commands in your terminal:
 
-- **Prompt Command**: The `PROMPT_COMMAND` variable is set to automatically save the command history after each command.
-- **History Control**: Settings to manage the size of the history file and how duplicates are handled.
+```sh
+git clone --depth=1 https://github.com/secdoc/mybash.git
+cd mybash
+./setup.sh
+```
 
-### System-Specific Aliases and Settings
+The `setup.sh` script automates the installation process by:
 
-- **Editor Settings**: Sets `nano` (nano) as the default editor.
-- **Conditional Aliases**: Depending on the system type (like Fedora), it sets specific aliases, e.g., replacing `cat` with `bat`.
+- Creating necessary directories under `~/.local/share/mybash` and `~/.config`
+- Copying the managed repository files into `~/.local/share/mybash`
+- Installing Homebrew on macOS if it is not already installed
+- Installing Bash 5 with Homebrew on macOS
+- Adding Homebrew Bash to `/etc/shells` and setting it as the default login shell on macOS
+- Installing dependencies (bash-completion, neovim, starship, fzf, zoxide)
+- Installing Starship and JetBrainsMono Nerd Font on Linux
+- Selecting JetBrainsMono Nerd Font in Ptyxis or GNOME Terminal when available
+- Installing the MesloLGS Nerd Font required for the prompt on macOS when available
+- Linking configuration files from `~/.local/share/mybash` to your home directory
+- Linking the fastfetch config to `~/.config/fastfetch/config.jsonc`
+- Linking the dense Alacritty profile to `~/.config/alacritty/alacritty.toml`
+- Applying the SECDOC Starship palette non-interactively
+- Ensuring `~/.bash_profile` initializes Homebrew on macOS
+- Ensuring `~/.bash_profile` sources `~/.bashrc` on macOS
+- Setting up additional utilities like `fastfetch`
 
-### Enhancements and Utilities
+On macOS, `setup.sh` may prompt for your password when it adds Homebrew Bash to `/etc/shells` and changes your default shell. Restart Terminal after installation, then verify with:
 
-- **Color and Formatting**: Enhancements for command output readability using colors and formatting for tools like `ls`, `grep`, and `man`.
-- **Navigation Shortcuts**: Aliases to simplify directory navigation, e.g., `alias ..='cd ..'` to go up one directory.
-- **Safety Features**: Aliases for safer file operations, like using `trash` instead of `rm` for deleting files, to prevent accidental data loss.
-- **Extensive Zoxide support**: Easily navigate with `z`, `zi`, or pressing Ctrl+f to launch zi to see frequently used navigation directories.
+```sh
+echo "$SHELL"
+bash --version
+```
 
-### Advanced Functions
+`$SHELL` should point to the Homebrew Bash path, such as `/opt/homebrew/bin/bash` on Apple Silicon or `/usr/local/bin/bash` on Intel Macs. On Linux, ensure you have the required permissions and a supported package manager.
 
-- **System Information**: Functions to display system information like `distribution()` to identify the Linux distribution.
-- **Networking Utilities**: Tools to check internal and external IP addresses.
-- **Resource Monitoring**: Commands to monitor system resources like disk usage and open ports.
+## Switching Color Palettes
 
-### Installation and Configuration Helpers
+Use `starship-theme` to recolor the prompt without changing its layout:
 
-- **Auto-Install**: A function `install_bashrc_support()` to automatically install necessary utilities based on the system type.
-- **Configuration Editors**: Functions to edit important configuration files directly, e.g., `apacheconfig()` for Apache server configurations.
+```bash
+starship-theme          # interactive picker
+starship-theme secdoc   # restore the SECDOC default
+starship-theme fedora   # apply a palette directly
+starship-theme list     # list available palettes
+```
 
-### Conclusion
+Available palettes include SECDOC, Ubuntu, Claude, Arch, Fedora, Debian, Mint, Manjaro, Pop!_OS, Kali, Gentoo, Dracula, and the original Nord theme. Applying a palette repeatedly is idempotent and does not change prompt layout.
 
-This `.bashrc` file is a comprehensive setup that not only enhances the shell experience with useful aliases and functions but also provides system-specific configurations and safety features to cater to different user needs and system types. It is designed to make the terminal more user-friendly, efficient, and powerful for an average user.
+The SECDOC palette uses charcoal `#161616`, near-white `#F7F7F7`, yellow `#FFCC57`, orange `#EF802F`, lime `#EDF577`, magenta `#DB5192`, and neutral grays. Lime represents healthy utilization, magenta is reserved for warnings, and orange marks exceptional values such as audio above 100 percent.
 
+![Starship color palettes](assets/palettes.png)
+
+## Uninstallation
+
+To uninstall the `.bashrc` configuration, run:
+
+```sh
+cd mybash
+chmod +x uninstall.sh
+./uninstall.sh
+./uninstall.sh --keep-deps
+```
+
+Use `--keep-deps` to remove the mybash configuration while retaining installed software and fonts.
+
+The `uninstall.sh` script reverses the installation process by:
+
+- Removing installed dependencies
+- Uninstalling fonts
+- Removing symbolic links to configuration files
+- Restoring the `.bashrc` backup created during installation
+- Restoring previous Ptyxis or GNOME Terminal font settings
+- Deleting the `~/.local/share/mybash` directory
+- Cleaning up additional utilities like `starship`, `fzf`, and `zoxide`
+
+After running the script, it's recommended to restart your shell to apply the changes.
+
+## Configuration Files
+
+### `.bashrc`
+
+The `.bashrc` file defines aliases, functions, and environment variables to enhance your shell experience. Key features include:
+
+- **Aliases**: Shortcuts for common commands (e.g., `alias cp='cp -i'`)
+- **Functions**: Custom functions for tasks like extracting archives and copying files with progress
+
+### `starship.toml`
+
+The `starship.toml` file configures the [Starship](https://starship.rs/) prompt, providing a highly customizable and informative shell prompt. It includes:
+
+- **Theme Settings**: Defines colors and symbols for different prompt segments
+- **Module Configurations**: Customizes modules like `python`, `git`, `docker_context`, and various programming languages
+- **Format Customization**: Structures the layout and truncation of paths for a cleaner look
+
+### `config.jsonc`
+
+The `config.jsonc` file configures [fastfetch](https://github.com/AlexRogalskiy/fastfetch), a system information tool. It includes:
+
+- **Logo and Display Settings**: Customizes the appearance of system logos and separators
+- **Modules**: Defines which system information modules to display, such as CPU, GPU, OS, kernel, and uptime
+- **Custom Sections**: Adds custom formatted sections for hardware and software information
+
+### `alacritty.toml`
+
+The Alacritty profile maps ANSI semantic colors to the exact SECDOC palette, uses JetBrainsMono Nerd Font to match the installer, and minimizes padding for the approved dense layout. Because Fastfetch emits semantic ANSI colors, the same roles remain consistent across system information and shell output.
+
+## Key Features
+
+1. **Aliases and Functions**
+   - Shortcuts for common commands
+   - Custom functions for complex operations (e.g., extracting archives, copying with progress)
+
+2. **Prompt Customization and History Management**
+   - Configures PROMPT_COMMAND for automatic history saving
+   - Manages history file size and handles duplicates
+
+3. **Enhancements and Utilities**
+   - Improves command output readability with colors
+   - Introduces safer file operations (e.g., using `trash` instead of `rm`)
+   - Integrates Zoxide for easy directory navigation
+
+4. **Installation and Configuration Helpers**
+   - Auto-installs necessary utilities based on system type
+   - Provides functions to edit important configuration files
+
+## Advanced Functions
+
+- System information display
+- Networking utilities (e.g., IP address checks)
+- Resource monitoring tools
+
+## System-Specific Configurations
+
+- Editor settings (nano as the SECDOC default, with upstream fallbacks when unavailable)
+- Conditional aliases based on system type
+- Package manager-specific commands
+
+## Conclusion
+
+This `.bashrc` configuration offers a powerful and customizable terminal environment suitable for various Unix-like systems. It enhances productivity through smart aliases, functions, and integrated tools while maintaining flexibility for system-specific needs. Whether you're a developer, system administrator, or power user, this setup aims to make your terminal experience more efficient and enjoyable.
+
+For any issues, suggestions, or contributions, please open an issue or pull request in this repository. We welcome community involvement to make this configuration even better!

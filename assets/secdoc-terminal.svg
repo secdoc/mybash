@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900">
+<title>SECDOC dense mybash terminal theme preview</title>
+<desc>Dense two-column Pop OS system information display preserving the current machine details and ASCII operating-system mark, recolored with the SECDOC brand palette.</desc>
+<defs>
+  <linearGradient id="brand" x1="0" x2="1"><stop offset="0" stop-color="#FFCC57"/><stop offset=".45" stop-color="#EF802F"/><stop offset="1" stop-color="#EDF577"/></linearGradient>
+  <filter id="shadow"><feDropShadow dx="0" dy="12" stdDeviation="18" flood-color="#000" flood-opacity=".55"/></filter>
+</defs>
+<rect width="1400" height="900" fill="#3B3B3B"/>
+<rect x="38" y="35" width="1324" height="830" rx="18" fill="#161616" filter="url(#shadow)"/>
+<rect x="38" y="35" width="1324" height="44" rx="18" fill="#292929"/>
+<rect x="38" y="62" width="1324" height="17" fill="#292929"/>
+<circle cx="65" cy="57" r="6" fill="#555555"/><circle cx="86" cy="57" r="6" fill="#EF802F"/><circle cx="107" cy="57" r="6" fill="#EDF577"/>
+<text x="700" y="63" text-anchor="middle" fill="#C4C4C4" font-family="Montserrat,DejaVu Sans,sans-serif" font-size="15">secdoc@forge · system overview</text>
+<rect x="38" y="77" width="1324" height="3" fill="url(#brand)"/>
+<g font-family="DejaVu Sans Mono,monospace" font-size="16">
+  <g fill="#FFCC57" font-weight="700">
+    <text x="72" y="112">SECDOC</text><text x="121" y="112" fill="#C4C4C4" font-weight="400">// POP!_OS</text>
+  </g>
+  <g font-size="15" font-weight="700">
+    <text x="72" y="148" fill="#FFCC57">          /////////////</text>
+    <text x="72" y="167" fill="#EF802F">       ///////////////////</text>
+    <text x="72" y="186" fill="#FFCC57">    /////</text><text x="136" y="186" fill="#F7F7F7">/*767</text><text x="184" y="186" fill="#EDF577">///////////////</text>
+    <text x="72" y="205" fill="#FFCC57">  /////</text><text x="128" y="205" fill="#F7F7F7">7676767676*</text><text x="232" y="205" fill="#EDF577">////////////</text>
+    <text x="72" y="224" fill="#FFCC57"> /////</text><text x="120" y="224" fill="#F7F7F7">76767//7676767</text><text x="248" y="224" fill="#EDF577">//////////</text>
+    <text x="72" y="243" fill="#FFCC57">//////</text><text x="120" y="243" fill="#F7F7F7">767676///*76767</text><text x="264" y="243" fill="#EDF577">/////////</text>
+    <text x="72" y="262" fill="#EF802F">///////</text><text x="128" y="262" fill="#F7F7F7">767676//76767.//7676*</text><text x="320" y="262" fill="#FFCC57">////</text>
+    <text x="72" y="281" fill="#EF802F">///////</text><text x="128" y="281" fill="#F7F7F7">767676//76767//767676/</text><text x="320" y="281" fill="#FFCC57">////</text>
+    <text x="72" y="300" fill="#EF802F">////////</text><text x="136" y="300" fill="#F7F7F7">7676767676////76767/</text><text x="312" y="300" fill="#FFCC57">/////</text>
+    <text x="72" y="319" fill="#EF802F">/////////</text><text x="144" y="319" fill="#F7F7F7">/76767676/////7676/</text><text x="304" y="319" fill="#FFCC57">//////</text>
+    <text x="72" y="338" fill="#FFCC57">///////////</text><text x="160" y="338" fill="#F7F7F7">,7676,/////767/</text><text x="288" y="338" fill="#FFCC57">////////</text>
+    <text x="72" y="357" fill="#FFCC57">////////////</text><text x="168" y="357" fill="#F7F7F7">/*7676/////76/</text><text x="280" y="357" fill="#FFCC57">/////////</text>
+    <text x="72" y="376" fill="#FFCC57">/////////////</text><text x="176" y="376" fill="#F7F7F7">//7676///////</text><text x="280" y="376" fill="#FFCC57">/////////</text>
+    <text x="72" y="395" fill="#FFCC57">//////////////</text><text x="184" y="395" fill="#F7F7F7">/7676///767/</text><text x="280" y="395" fill="#FFCC57">/////////</text>
+    <text x="72" y="414" fill="#FFCC57">/////////////////////////</text><text x="272" y="414" fill="#FFCC57">///////</text>
+    <text x="72" y="433" fill="#FFCC57">//////.</text><text x="128" y="433" fill="#F7F7F7">7676767676767676767,</text><text x="296" y="433" fill="#FFCC57">/////</text>
+    <text x="72" y="452" fill="#EF802F">  /////</text><text x="128" y="452" fill="#F7F7F7">767676767676767676767</text><text x="304" y="452" fill="#FFCC57">////</text>
+    <text x="72" y="471" fill="#EF802F">    ///////////////////////</text>
+    <text x="72" y="490" fill="#FFCC57">        /////////////</text>
+  </g>
+
+  <g font-size="16">
+    <text x="425" y="113" fill="#EDF577" font-weight="700">HOST</text><text x="542" y="113" fill="#F7F7F7"><tspan fill="#FFCC57" font-weight="700">secdoc</tspan><tspan fill="#C4C4C4">@</tspan><tspan fill="#FFCC57" font-weight="700">forge</tspan></text>
+    <text x="425" y="137" fill="#EDF577" font-weight="700">HST</text><text x="542" y="137" fill="#C4C4C4">Thelio Mira (thelio-mira-r4)</text>
+    <text x="425" y="161" fill="#EF802F" font-weight="700">CPU</text><text x="542" y="161" fill="#F7F7F7">AMD Ryzen 9 9950X (32) @ 5.76 GHz</text>
+    <text x="425" y="185" fill="#EF802F" font-weight="700">GPU·I</text><text x="542" y="185" fill="#C4C4C4">AMD Radeon Graphics [Integrated]</text>
+    <text x="425" y="209" fill="#EF802F" font-weight="700">GPU·D</text><text x="542" y="209" fill="#F7F7F7">NVIDIA GeForce RTX 5080 [Discrete]</text>
+    <text x="425" y="245" fill="#FFCC57" font-weight="700">DISK /</text><text x="542" y="245" fill="#C4C4C4">444.10 GiB / 1.79 TiB (<tspan fill="#EDF577">24%</tspan>) · ext4</text>
+    <text x="425" y="269" fill="#FFCC57" font-weight="700">/data</text><text x="542" y="269" fill="#C4C4C4">313.27 GiB / 3.58 TiB (<tspan fill="#EDF577">9%</tspan>) · ext4</text>
+    <text x="425" y="293" fill="#FFCC57" font-weight="700">/storage</text><text x="542" y="293" fill="#C4C4C4">2.71 TiB / 7.22 TiB (<tspan fill="#EDF577">38%</tspan>) · ext4</text>
+    <text x="425" y="317" fill="#FFCC57" font-weight="700">/recovery</text><text x="542" y="317" fill="#C4C4C4">3.34 GiB / 3.81 GiB (<tspan fill="#DB5192">88%</tspan>) · vfat</text>
+    <text x="425" y="353" fill="#FFCC57" font-weight="700">MEMORY</text><text x="542" y="353" fill="#C4C4C4">33.33 GiB / 123.40 GiB (<tspan fill="#EDF577">27%</tspan>)</text>
+    <text x="425" y="377" fill="#FFCC57" font-weight="700">SWAP</text><text x="542" y="377" fill="#C4C4C4">0 B / 16.00 GiB (<tspan fill="#EDF577">0%</tspan>)</text>
+    <text x="425" y="401" fill="#FFCC57" font-weight="700">AUDIO</text><text x="542" y="401" fill="#C4C4C4">RODECaster Pro II Pro (<tspan fill="#EF802F">118%</tspan>)</text>
+
+    <text x="935" y="113" fill="#FFCC57" font-weight="700">DISPLAY</text>
+    <text x="935" y="137" fill="#FFCC57" font-weight="700">HDMI1</text><text x="1038" y="137" fill="#C4C4C4">1920×1080 @ 60Hz</text>
+    <text x="935" y="161" fill="#FFCC57" font-weight="700">U34G3G3R</text><text x="1038" y="161" fill="#C4C4C4">3440×1440 @ 165Hz</text>
+    <text x="935" y="185" fill="#FFCC57" font-weight="700">U34G3G3R</text><text x="1038" y="185" fill="#C4C4C4">3440×1440 @ 165Hz</text>
+    <text x="935" y="209" fill="#FFCC57" font-weight="700">U34G3G3R</text><text x="1038" y="209" fill="#C4C4C4">3440×1440 @ 165Hz</text>
+    <text x="935" y="245" fill="#EDF577" font-weight="700">LOCAL IP</text><text x="1038" y="245" fill="#C4C4C4">192.0.2.55/24</text>
+    <text x="1038" y="269" fill="#555555">02:00:5e:10:00:01</text>
+    <text x="935" y="293" fill="#EDF577" font-weight="700">IFNAME</text><text x="1038" y="293" fill="#C4C4C4">enp5s0f1</text>
+    <text x="935" y="317" fill="#EDF577" font-weight="700">WIFI</text><text x="1038" y="317" fill="#F7F7F7">example-enterprise</text>
+    <text x="935" y="353" fill="#FFCC57" font-weight="700">DE</text><text x="1038" y="353" fill="#C4C4C4">COSMIC 1.0.0</text>
+    <text x="935" y="377" fill="#FFCC57" font-weight="700">WM</text><text x="1038" y="377" fill="#C4C4C4">cosmic-comp (Wayland)</text>
+    <text x="935" y="401" fill="#FFCC57" font-weight="700">SHELL</text><text x="1038" y="401" fill="#C4C4C4">bash 5.2.21</text>
+    <text x="935" y="425" fill="#FFCC57" font-weight="700">TERM</text><text x="1038" y="425" fill="#C4C4C4">cosmic-term 1.7.0</text>
+  </g>
+
+  <rect x="425" y="447" width="864" height="2" fill="#555555" opacity=".65"/>
+  <g font-size="16">
+    <text x="425" y="477" fill="#FFCC57" font-weight="700">OS</text><text x="542" y="477" fill="#F7F7F7">Pop!_OS 24.04 LTS x86_64</text>
+    <text x="425" y="501" fill="#EF802F" font-weight="700">KERNEL</text><text x="542" y="501" fill="#C4C4C4">Linux 7.1.5-76070105-generic</text>
+    <text x="425" y="525" fill="#FFCC57" font-weight="700">PACKAGES</text><text x="542" y="525" fill="#C4C4C4">2379 (dpkg) · 128 (flatpak-user)</text>
+    <text x="935" y="477" fill="#EDF577" font-weight="700">UPTIME</text><text x="1038" y="477" fill="#C4C4C4">3 hours, 30 mins</text>
+  </g>
+
+  <rect x="72" y="540" width="1217" height="2" fill="url(#brand)"/>
+  <g transform="translate(72 570)" font-size="16">
+    <path d="M0 0h150l18 20-18 20H0q-15-20 0-40" fill="#555555"/><text x="18" y="26" fill="#F7F7F7">secdoc</text>
+    <path d="M150 0h86l18 20-18 20h-86l18-20z" fill="#FFCC57"/><text x="184" y="26" fill="#161616">~</text>
+    <path d="M236 0h58l18 20-18 20h-58l18-20z" fill="#555555"/><text x="264" y="26" fill="#F7F7F7">⌁</text>
+    <path d="M294 0h110q16 20 0 40H294l18-20z" fill="#EF802F" stroke="#EF802F"/><text x="333" y="26" fill="#161616">13:33</text>
+    <rect x="424" y="4" width="3" height="30" fill="#F7F7F7"/>
+  </g>
+  <text x="72" y="645" fill="#C4C4C4">$ fastfetch</text>
+  <text x="72" y="678" fill="#555555">dense profile · brand-aware · current inventory preserved</text>
+  <rect x="72" y="707" width="1217" height="1" fill="#292929"/>
+  <text x="72" y="741" fill="#FFCC57"># compact prompt modules</text>
+  <text x="72" y="770" fill="#C4C4C4">git branch/status, exit code, jobs, duration and clock appear only when relevant</text>
+  <text x="72" y="807" fill="#F7F7F7">$ </text><rect x="91" y="789" width="11" height="22" fill="#F7F7F7"/>
+</g>
+<text x="1289" y="841" text-anchor="end" fill="#555555" font-family="Montserrat,DejaVu Sans,sans-serif" font-size="12">SECDOC THEME · IMPLEMENTED CONFIGURATION · REPRESENTATIVE NETWORK VALUES</text>
+</svg>
