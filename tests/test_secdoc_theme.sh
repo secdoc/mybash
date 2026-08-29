@@ -63,10 +63,44 @@ assert_contains setup.sh 'starship-theme" secdoc'
 assert_contains uninstall.sh '.config/alacritty/alacritty.toml'
 assert_contains .bashrc 'export EDITOR=nano'
 assert_contains .bashrc 'export VISUAL=nano'
+assert_contains setup.sh 'apt-get install -y bash-completion bat'
+assert_contains .bashrc "alias cat='batcat --paging=never --style=plain'"
+assert_contains .bashrc "alias cat='bat --paging=never --style=plain'"
 assert_contains .github/FUNDING.yml 'github: secdoc'
 assert_contains README.md 'https://github.com/secdoc/mybash.git'
 assert_contains README.md 'ChrisTitusTech/mybash'
 assert_contains README.md 'starship-theme secdoc'
 assert_contains README.md 'full disk mount-point labels'
+assert_contains README.md 'batcat'
+
+# The interactive cat alias prefers Debian's batcat command and preserves stdin.
+BAT_TEST_DIR="$TMPDIR/bat-test"
+mkdir -p "$BAT_TEST_DIR"
+cat >"$BAT_TEST_DIR/batcat" <<'EOF'
+#!/bin/sh
+printf 'args:%s\n' "$*"
+cat
+EOF
+chmod +x "$BAT_TEST_DIR/batcat"
+bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
+[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke batcat correctly: $bat_output"
+
+# The fallback uses bat when batcat is unavailable.
+BAT_FALLBACK_DIR="$TMPDIR/bat-fallback-test"
+mkdir -p "$BAT_FALLBACK_DIR"
+cat >"$BAT_FALLBACK_DIR/bat" <<'EOF'
+#!/bin/sh
+printf 'args:%s\n' "$*"
+cat
+EOF
+chmod +x "$BAT_FALLBACK_DIR/bat"
+bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
+[[ $bat_fallback_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke bat fallback correctly: $bat_fallback_output"
+
+# Aliases do not expand in non-interactive Bash, and command cat bypasses them interactively.
+noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; eval "printf payload | cat"' bash "$ROOT/.bashrc" 2>/dev/null)
+[[ $noninteractive_output == payload ]] || fail "non-interactive cat behavior changed: $noninteractive_output"
+bypass_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | command cat"' 2>/dev/null)
+[[ $bypass_output == payload ]] || fail "command cat did not bypass the alias: $bypass_output"
 
 printf 'SECDOC theme contract passed.\n'
