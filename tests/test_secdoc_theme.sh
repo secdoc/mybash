@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2030,SC2031 # HOME changes are intentionally isolated in test subshells.
 set -euo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
@@ -12,6 +13,7 @@ assert_file starship-theme
 assert_file alacritty.toml
 
 # Starship exposes the approved conditional modules in a compact prompt.
+# shellcheck disable=SC2016 # These are literal Starship module names.
 for module in '$git_branch' '$git_status' '$status' '$jobs' '$cmd_duration' '$time'; do
   assert_contains starship.toml "$module"
 done
@@ -82,8 +84,8 @@ printf 'args:%s\n' "$*"
 cat
 EOF
 chmod +x "$BAT_TEST_DIR/batcat"
-bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
-[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke batcat correctly: $bat_output"
+bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
+[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "interactive cat did not invoke batcat directly: $bat_output"
 
 # The fallback uses bat when batcat is unavailable.
 BAT_FALLBACK_DIR="$TMPDIR/bat-fallback-test"
@@ -94,13 +96,107 @@ printf 'args:%s\n' "$*"
 cat
 EOF
 chmod +x "$BAT_FALLBACK_DIR/bat"
-bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
+bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
 [[ $bat_fallback_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke bat fallback correctly: $bat_fallback_output"
 
 # Aliases do not expand in non-interactive Bash, and command cat bypasses them interactively.
-noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; eval "printf payload | cat"' bash "$ROOT/.bashrc" 2>/dev/null)
+noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; printf payload | cat' bash "$ROOT/.bashrc" 2>/dev/null)
 [[ $noninteractive_output == payload ]] || fail "non-interactive cat behavior changed: $noninteractive_output"
-bypass_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | command cat"' 2>/dev/null)
+bypass_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | command cat' 2>/dev/null)
 [[ $bypass_output == payload ]] || fail "command cat did not bypass the alias: $bypass_output"
+
+# Linux login shells must source the installed .bashrc, and repeated setup is idempotent.
+LOGIN_HOME="$TMPDIR/login-home"
+mkdir -p "$LOGIN_HOME"
+printf '# existing profile\n' >"$LOGIN_HOME/.profile"
+ln -s "$ROOT/.bashrc" "$LOGIN_HOME/.bashrc"
+(
+  export HOME="$LOGIN_HOME" MYBASH_SETUP_LIB_ONLY=1 PATH="$BAT_TEST_DIR:/usr/bin:/bin"
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  # shellcheck disable=SC2034 # Consumed by the sourced setup function.
+  OS_NAME=Linux
+  ensure_login_profile_sources_bashrc
+  ensure_login_profile_sources_bashrc
+)
+# shellcheck disable=SC2016 # Match the literal profile command.
+grep -Fq '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile" || fail 'Linux login profile does not source .bashrc'
+# shellcheck disable=SC2016 # Match the literal profile command.
+[[ $(grep -Fc '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile") -eq 1 ]] || fail 'login profile sources .bashrc more than once'
+login_alias_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$LOGIN_HOME" bash --noprofile --norc -c '. "$1"; alias cat' bash "$LOGIN_HOME/.profile" 2>/dev/null)
+[[ $login_alias_output == "alias cat='batcat --paging=never --style=plain'" ]] || fail "generated login profile did not load the cat alias: $login_alias_output"
+assert_contains setup.sh "bash --login -ic 'alias cat >&3'"
+
+# Respect Bash profile precedence and recognize the common ${HOME}/.bashrc form.
+PROFILE_HOME="$TMPDIR/bash-profile-home"
+mkdir -p "$PROFILE_HOME"
+# shellcheck disable=SC2016 # Write the literal ${HOME} profile form.
+printf '%s\n' '. "${HOME}/.bashrc"' >"$PROFILE_HOME/.bash_profile"
+(
+  export HOME="$PROFILE_HOME" MYBASH_SETUP_LIB_ONLY=1
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  # shellcheck disable=SC2034 # Consumed by the sourced setup function.
+  OS_NAME=Linux
+  ensure_login_profile_sources_bashrc
+)
+[[ $(grep -c '\.bashrc' "$PROFILE_HOME/.bash_profile") -eq 1 ]] || fail 'existing bash profile received a duplicate .bashrc source block'
+[[ ! -e $PROFILE_HOME/.profile ]] || fail 'setup ignored existing .bash_profile precedence'
+
+# Comments and unrelated commands mentioning .bashrc are not source directives.
+COMMENT_HOME="$TMPDIR/comment-profile-home"
+mkdir -p "$COMMENT_HOME"
+# shellcheck disable=SC2016 # Write literal commented and non-source references.
+printf '%s\n' '# . "$HOME/.bashrc"' 'echo "$HOME/.bashrc" >/dev/null' >"$COMMENT_HOME/.profile"
+(
+  export HOME="$COMMENT_HOME" MYBASH_SETUP_LIB_ONLY=1
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  # shellcheck disable=SC2034 # Consumed by the sourced setup function.
+  OS_NAME=Linux
+  ensure_login_profile_sources_bashrc
+)
+grep -Fq '# >>> mybash .bashrc >>>' "$COMMENT_HOME/.profile" || fail 'commented .bashrc reference suppressed the login-shell source block'
+
+# A POSIX shell may read .profile, so the generated block must not source Bash syntax there.
+/bin/sh -c '. "$1"' sh "$LOGIN_HOME/.profile" >/dev/null 2>&1 || fail 'generated .profile is unsafe for non-Bash shells'
+
+# Verification must require login mode and an exact alias definition.
+VERIFY_HOME="$TMPDIR/verify-home"
+mkdir -p "$VERIFY_HOME/bin"
+cat >"$VERIFY_HOME/bin/batcat" <<'EOF'
+#!/bin/sh
+exit 0
+EOF
+cat >"$VERIFY_HOME/bin/bash" <<'EOF'
+#!/bin/sh
+printf '%s\n' "$*" >"$HOME/bash-args"
+printf "%s\n" "alias cat='batcat --paging=never --style=plain'" >&3
+EOF
+chmod +x "$VERIFY_HOME/bin/batcat" "$VERIFY_HOME/bin/bash"
+(
+  export HOME="$VERIFY_HOME" MYBASH_SETUP_LIB_ONLY=1 PATH="$VERIFY_HOME/bin:/usr/bin:/bin"
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  verify_interactive_cat_alias >/dev/null
+)
+grep -Fq -- '--login -ic alias cat >&3' "$VERIFY_HOME/bash-args" || fail 'alias verification did not use a login shell'
+
+BAD_HOME="$TMPDIR/bad-alias-home"
+mkdir -p "$BAD_HOME/bin"
+cp "$VERIFY_HOME/bin/batcat" "$BAD_HOME/bin/batcat"
+cat >"$BAD_HOME/bin/bash" <<'EOF'
+#!/bin/sh
+printf "%s\n" "alias cat='notbatcat --paging=never --style=plain'" >&3
+EOF
+chmod +x "$BAD_HOME/bin/bash"
+if (
+  export HOME="$BAD_HOME" MYBASH_SETUP_LIB_ONLY=1 PATH="$BAD_HOME/bin:/usr/bin:/bin"
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  verify_interactive_cat_alias >/dev/null 2>&1
+); then
+  fail 'alias verification accepted a lookalike command'
+fi
 
 printf 'SECDOC theme contract passed.\n'

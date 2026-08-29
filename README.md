@@ -111,7 +111,7 @@ The `.bashrc` file defines aliases, functions, and environment variables to enha
 
 - **Aliases**: Shortcuts for common commands (e.g., `alias cp='cp -i'`)
 - **Functions**: Custom functions for tasks like extracting archives and copying files with progress
-- **Enhanced `cat` output**: Typing `cat` invokes `batcat --paging=never --style=plain` on Debian-family systems, or `bat` with the same options on other supported platforms. Use `\cat` or `command cat` to bypass the alias.
+- **Enhanced `cat` output**: Typing `cat` invokes `batcat --paging=never --style=plain` on Debian-family systems, or `bat` with the same options on other supported platforms. Setup verifies the alias and ensures Linux and macOS Bash login shells source the installed `.bashrc`. Use `\cat` or `command cat` to bypass the alias.
 
 ### `starship.toml`
 
