@@ -100,8 +100,13 @@ if [[ $iatest -gt 0 ]]; then bind "set completion-ignore-case on"; fi
 # Show auto-completion list automatically, without double tab
 if [[ $iatest -gt 0 ]]; then bind "set show-all-if-ambiguous On"; fi
 
-# Set the default editor
-if command -v nvim >/dev/null 2>&1; then
+# Set the default editor. The SECDOC downstream preference is nano,
+# with upstream's editor fallbacks retained for hosts where nano is absent.
+if command -v nano >/dev/null 2>&1; then
+	export EDITOR=nano
+	export VISUAL=nano
+	alias pico='nano'
+elif command -v nvim >/dev/null 2>&1; then
 	export EDITOR=nvim
 	export VISUAL=nvim
 	alias vim='nvim'

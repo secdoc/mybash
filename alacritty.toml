@@ -1,0 +1,54 @@
+# SECDOC terminal profile for Alacritty
+# Dense geometry and the exact SECDOC semantic palette.
+
+[window]
+dimensions = { columns = 120, lines = 34 }
+opacity = 0.92
+padding = { x = 6, y = 4 }
+dynamic_padding = false
+decorations = "Full"
+decorations_theme_variant = "Dark"
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+italic = { family = "JetBrainsMono Nerd Font", style = "Italic" }
+bold_italic = { family = "JetBrainsMono Nerd Font", style = "Bold Italic" }
+size = 11.0
+builtin_box_drawing = true
+
+[colors.primary]
+background = "#161616"
+foreground = "#F7F7F7"
+dim_foreground = "#C4C4C4"
+bright_foreground = "#F7F7F7"
+
+[colors.cursor]
+text = "#161616"
+cursor = "#FFCC57"
+
+[colors.selection]
+text = "#161616"
+background = "#C4C4C4"
+
+# Fastfetch semantic roles: red=exception, green=healthy,
+# yellow=identity, magenta=warning, white=near-white.
+[colors.normal]
+black = "#161616"
+red = "#DB5192"
+green = "#EDF577"
+yellow = "#FFCC57"
+blue = "#555555"
+magenta = "#DB5192"
+cyan = "#C4C4C4"
+white = "#F7F7F7"
+
+[colors.bright]
+black = "#555555"
+red = "#EF802F"
+green = "#EDF577"
+yellow = "#FFCC57"
+blue = "#C4C4C4"
+magenta = "#DB5192"
+cyan = "#F7F7F7"
+white = "#F7F7F7"

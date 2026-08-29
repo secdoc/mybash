@@ -36,3 +36,6 @@ jobs:
         else
           echo "No linting errors found."
         fi
+
+    - name: Test SECDOC theme contract
+      run: tests/test_secdoc_theme.sh

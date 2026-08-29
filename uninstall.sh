@@ -152,8 +152,9 @@ remove_configs() {
 	# Remove starship config
 	rm -f "$USER_HOME/.config/starship.toml"
 
-	# Remove fastfetch config
+	# Remove fastfetch and Alacritty configs
 	rm -f "$USER_HOME/.config/fastfetch/config.jsonc"
+	rm -f "$USER_HOME/.config/alacritty/alacritty.toml"
 	rm -f "$USER_HOME/.local/bin/starship-theme"
 
 	print_colored "$GREEN" "Configuration files removed"

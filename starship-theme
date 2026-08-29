@@ -8,6 +8,7 @@ SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 SLOTS=(3B4252 434C5E 4C566A 86BBD8 06969A 33658A)
 
 declare -A THEMES=(
+	[secdoc]="161616 3B3B3B 555555 DB5192 FFCC57 EF802F"
 	[ubuntu]="772953 E95420 77216F 5E2750 772953 E95420"
 	[nord]="3B4252 434C5E 4C566A 86BBD8 06969A 33658A"
 	[arch]="2E3B43 1793D1 0F5E8C 33A4DB 0C4A6E 1793D1"
@@ -22,7 +23,7 @@ declare -A THEMES=(
 	[dracula]="6272A4 BD93F9 FF79C6 8BE9FD 50FA7B BD93F9"
 )
 
-ORDER=(ubuntu claude arch fedora debian mint manjaro popos kali gentoo dracula nord)
+ORDER=(secdoc ubuntu claude arch fedora debian mint manjaro popos kali gentoo dracula nord)
 
 error() {
 	printf 'starship-theme: %s\n' "$*" >&2

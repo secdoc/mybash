@@ -1,10 +1,12 @@
-# ChrisTitusTech's `.bashrc` Configuration (Linux/Mac)
+# SECDOC mybash (Linux/macOS)
 
-<img width="981" height="509" alt="SCR-20260713-cpkx" src="https://github.com/user-attachments/assets/67dc2cdb-7101-4a20-9635-99c244f24db5" />
+![SECDOC dense terminal theme](assets/secdoc-terminal.png)
 
 ## Overview
 
-This repository provides a comprehensive `.bashrc` configuration along with supporting scripts and configuration files to enhance your terminal experience in Unix-like operating systems. It configures the shell session by setting up aliases, defining functions, customizing the prompt, and more, significantly improving the terminal's usability and power.
+This is the SECDOC downstream distribution of [ChrisTitusTech/mybash](https://github.com/ChrisTitusTech/mybash). It tracks current upstream behavior while retaining SECDOC's nano preference, funding metadata, dense Fastfetch layout, Alacritty profile, and branded prompt. Upstream authorship and the MIT license are preserved.
+
+The default SECDOC presentation uses the Pop!_OS slash-and-76 ASCII logo in a high-density two-column Fastfetch layout. It reports host, hardware, storage, memory, audio, displays, network, COSMIC desktop, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
 
 ## Table of Contents
 
@@ -15,6 +17,7 @@ This repository provides a comprehensive `.bashrc` configuration along with supp
   - [.bashrc](#bashrc)
   - [starship.toml](#starshiptoml)
   - [config.jsonc](#configjsonc)
+  - [alacritty.toml](#alacrittytoml)
 - [Key Features](#key-features)
 - [Advanced Functions](#advanced-functions)
 - [System-Specific Configurations](#system-specific-configurations)
@@ -25,14 +28,14 @@ This repository provides a comprehensive `.bashrc` configuration along with supp
 To install the `.bashrc` configuration, execute the following commands in your terminal:
 
 ```sh
-git clone --depth=1 https://github.com/christitustech/mybash.git
+git clone --depth=1 https://github.com/secdoc/mybash.git
 cd mybash
 ./setup.sh
 ```
 
 The `setup.sh` script automates the installation process by:
 
-- Creating necessary directories (`~/.local/share/mybash`, `~/.config/starship`, and `~/.config/fastfetch`)
+- Creating necessary directories under `~/.local/share/mybash` and `~/.config`
 - Copying the managed repository files into `~/.local/share/mybash`
 - Installing Homebrew on macOS if it is not already installed
 - Installing Bash 5 with Homebrew on macOS
@@ -43,6 +46,8 @@ The `setup.sh` script automates the installation process by:
 - Installing the MesloLGS Nerd Font required for the prompt on macOS when available
 - Linking configuration files from `~/.local/share/mybash` to your home directory
 - Linking the fastfetch config to `~/.config/fastfetch/config.jsonc`
+- Linking the dense Alacritty profile to `~/.config/alacritty/alacritty.toml`
+- Applying the SECDOC Starship palette non-interactively
 - Ensuring `~/.bash_profile` initializes Homebrew on macOS
 - Ensuring `~/.bash_profile` sources `~/.bashrc` on macOS
 - Setting up additional utilities like `fastfetch`
@@ -62,11 +67,14 @@ Use `starship-theme` to recolor the prompt without changing its layout:
 
 ```bash
 starship-theme          # interactive picker
+starship-theme secdoc   # restore the SECDOC default
 starship-theme fedora   # apply a palette directly
 starship-theme list     # list available palettes
 ```
 
-Available palettes include Ubuntu, Claude, Arch, Fedora, Debian, Mint, Manjaro, Pop!_OS, Kali, Gentoo, Dracula, and the original Nord theme.
+Available palettes include SECDOC, Ubuntu, Claude, Arch, Fedora, Debian, Mint, Manjaro, Pop!_OS, Kali, Gentoo, Dracula, and the original Nord theme. Applying a palette repeatedly is idempotent and does not change prompt layout.
+
+The SECDOC palette uses charcoal `#161616`, near-white `#F7F7F7`, yellow `#FFCC57`, orange `#EF802F`, lime `#EDF577`, magenta `#DB5192`, and neutral grays. Lime represents healthy utilization, magenta is reserved for warnings, and orange marks exceptional values such as audio above 100 percent.
 
 ![Starship color palettes](assets/palettes.png)
 
@@ -120,6 +128,10 @@ The `config.jsonc` file configures [fastfetch](https://github.com/AlexRogalskiy/
 - **Modules**: Defines which system information modules to display, such as CPU, GPU, OS, kernel, and uptime
 - **Custom Sections**: Adds custom formatted sections for hardware and software information
 
+### `alacritty.toml`
+
+The Alacritty profile maps ANSI semantic colors to the exact SECDOC palette, uses JetBrainsMono Nerd Font to match the installer, and minimizes padding for the approved dense layout. Because Fastfetch emits semantic ANSI colors, the same roles remain consistent across system information and shell output.
+
 ## Key Features
 
 1. **Aliases and Functions**
@@ -147,7 +159,7 @@ The `config.jsonc` file configures [fastfetch](https://github.com/AlexRogalskiy/
 
 ## System-Specific Configurations
 
-- Editor settings (NeoVim as default)
+- Editor settings (nano as the SECDOC default, with upstream fallbacks when unavailable)
 - Conditional aliases based on system type
 - Package manager-specific commands
 

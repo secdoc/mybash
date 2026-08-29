@@ -366,6 +366,7 @@ install_configs() {
 	cp -p "$SCRIPT_DIR/.bashrc" "$MYBASHDIR/.bashrc"
 	cp -p "$SCRIPT_DIR/starship.toml" "$MYBASHDIR/starship.toml"
 	cp -p "$SCRIPT_DIR/config.jsonc" "$MYBASHDIR/config.jsonc"
+	cp -p "$SCRIPT_DIR/alacritty.toml" "$MYBASHDIR/alacritty.toml"
 	cp -p "$SCRIPT_DIR/README.md" "$MYBASHDIR/README.md"
 	cp -p "$SCRIPT_DIR/setup.sh" "$MYBASHDIR/setup.sh"
 	cp -p "$SCRIPT_DIR/uninstall.sh" "$MYBASHDIR/uninstall.sh"
@@ -375,7 +376,9 @@ install_configs() {
 	link_file "$MYBASHDIR/.bashrc" "$HOME/.bashrc"
 	link_file "$MYBASHDIR/starship.toml" "$HOME/.config/starship.toml"
 	link_file "$MYBASHDIR/config.jsonc" "$HOME/.config/fastfetch/config.jsonc"
+	link_file "$MYBASHDIR/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml"
 	link_file "$MYBASHDIR/starship-theme" "$HOME/.local/bin/starship-theme"
+	STARSHIP_CONFIG="$HOME/.config/starship.toml" STARSHIP_THEME_BASE="$MYBASHDIR/starship.toml" "$MYBASHDIR/starship-theme" secdoc
 	ensure_homebrew_bash_macos
 	ensure_bash_profile_brew_shellenv
 	ensure_bash_profile_sources_bashrc
