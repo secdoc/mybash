@@ -42,6 +42,16 @@ assert_contains config.jsonc '"key": "AUDIO"'
 assert_contains config.jsonc '"keyColor": "38;2;239;128;47"'
 assert_contains config.jsonc '\u001b[38;2;239;128;47m{name} ({volume-percentage})'
 
+# Disk labels must expose every configured mount point without clipping.
+assert_contains config.jsonc '"key": "Disk ({mountpoint})"'
+assert_contains config.jsonc '"keyWidth": 19'
+for mountpoint in '"/"' '"/mnt/data"' '"/mnt/storage"' '"/recovery"'; do
+  assert_contains config.jsonc "$mountpoint"
+done
+for label in 'DISK (/)' 'DISK (/mnt/data)' 'DISK (/mnt/storage)' 'DISK (/recovery)'; do
+  assert_contains assets/secdoc-terminal.svg "$label"
+done
+
 # Alacritty maps semantic ANSI names to the approved exact brand palette.
 for color in '#161616' '#F7F7F7' '#FFCC57' '#EF802F' '#EDF577' '#DB5192' '#C4C4C4' '#555555'; do
   grep -Fqi "$color" "$ROOT/alacritty.toml" || fail "Alacritty lacks $color"
@@ -57,5 +67,6 @@ assert_contains .github/FUNDING.yml 'github: secdoc'
 assert_contains README.md 'https://github.com/secdoc/mybash.git'
 assert_contains README.md 'ChrisTitusTech/mybash'
 assert_contains README.md 'starship-theme secdoc'
+assert_contains README.md 'full disk mount-point labels'
 
 printf 'SECDOC theme contract passed.\n'

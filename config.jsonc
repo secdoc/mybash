@@ -10,14 +10,20 @@
     "separator": ": ",
     "key": { "width": 10 },
     "size": { "binaryPrefix": "iec" },
-    "percent": { "type": 3, "green": 50, "yellow": 80 }
+    "percent": { "type": 3 }
   },
   "modules": [
     { "type": "title", "fqdn": true, "keyColor": "yellow" },
     { "type": "host", "key": "HOST", "keyColor": "yellow" },
     { "type": "cpu", "key": "CPU", "keyColor": "yellow" },
     { "type": "gpu", "key": "GPU", "keyColor": "yellow" },
-    { "type": "disk", "key": "Disk ({mountpoint})", "folders": "/:/mnt/data:/mnt/storage:/recovery", "keyColor": "yellow" },
+    {
+      "type": "disk",
+      "key": "Disk ({mountpoint})",
+      "keyWidth": 19,
+      "folders": ["/", "/mnt/data", "/mnt/storage", "/recovery"],
+      "keyColor": "yellow"
+    },
     { "type": "memory", "key": "MEMORY", "keyColor": "yellow" },
     { "type": "swap", "key": "SWAP", "keyColor": "yellow" },
     { "type": "sound", "key": "AUDIO", "format": "\u001b[38;2;239;128;47m{name} ({volume-percentage})\u001b[0m", "keyColor": "38;2;239;128;47" },

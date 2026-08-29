@@ -6,7 +6,7 @@
 
 This is the SECDOC downstream distribution of [ChrisTitusTech/mybash](https://github.com/ChrisTitusTech/mybash). It tracks current upstream behavior while retaining SECDOC's nano preference, funding metadata, dense Fastfetch layout, Alacritty profile, and branded prompt. Upstream authorship and the MIT license are preserved.
 
-The default SECDOC presentation uses the Pop!_OS slash-and-76 ASCII logo in a high-density two-column Fastfetch layout. It reports host, hardware, storage, memory, audio, displays, network, COSMIC desktop, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
+The default SECDOC presentation uses the Pop!_OS slash-and-76 ASCII logo in a high-density two-column Fastfetch layout. It reports host, hardware, storage with full disk mount-point labels, memory, audio, displays, network, COSMIC desktop, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
 
 ## Table of Contents
 
