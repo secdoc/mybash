@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck disable=SC2030,SC2031 # HOME changes are intentionally isolated in test subshells.
 set -euo pipefail
 
 ROOT=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)
@@ -12,6 +13,7 @@ assert_file starship-theme
 assert_file alacritty.toml
 
 # Starship exposes the approved conditional modules in a compact prompt.
+# shellcheck disable=SC2016 # These are literal Starship module names.
 for module in '$git_branch' '$git_status' '$status' '$jobs' '$cmd_duration' '$time'; do
   assert_contains starship.toml "$module"
 done
@@ -82,8 +84,8 @@ printf 'args:%s\n' "$*"
 cat
 EOF
 chmod +x "$BAT_TEST_DIR/batcat"
-bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
-[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke batcat correctly: $bat_output"
+bat_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
+[[ $bat_output == $'args:--paging=never --style=plain\npayload' ]] || fail "interactive cat did not invoke batcat directly: $bat_output"
 
 # The fallback uses bat when batcat is unavailable.
 BAT_FALLBACK_DIR="$TMPDIR/bat-fallback-test"
@@ -94,13 +96,49 @@ printf 'args:%s\n' "$*"
 cat
 EOF
 chmod +x "$BAT_FALLBACK_DIR/bat"
-bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | cat"' 2>/dev/null)
+bat_fallback_output=$(PATH="$BAT_FALLBACK_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | cat' 2>/dev/null)
 [[ $bat_fallback_output == $'args:--paging=never --style=plain\npayload' ]] || fail "cat alias did not invoke bat fallback correctly: $bat_fallback_output"
 
 # Aliases do not expand in non-interactive Bash, and command cat bypasses them interactively.
-noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; eval "printf payload | cat"' bash "$ROOT/.bashrc" 2>/dev/null)
+noninteractive_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile -c '. "$1"; printf payload | cat' bash "$ROOT/.bashrc" 2>/dev/null)
 [[ $noninteractive_output == payload ]] || fail "non-interactive cat behavior changed: $noninteractive_output"
-bypass_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'eval "printf payload | command cat"' 2>/dev/null)
+bypass_output=$(PATH="$BAT_TEST_DIR:/usr/bin:/bin" HOME="$TMPDIR" bash --noprofile --rcfile "$ROOT/.bashrc" -ic 'printf payload | command cat' 2>/dev/null)
 [[ $bypass_output == payload ]] || fail "command cat did not bypass the alias: $bypass_output"
+
+# Linux login shells must source the installed .bashrc, and repeated setup is idempotent.
+LOGIN_HOME="$TMPDIR/login-home"
+mkdir -p "$LOGIN_HOME"
+printf '# existing profile\n' >"$LOGIN_HOME/.profile"
+ln -s "$ROOT/.bashrc" "$LOGIN_HOME/.bashrc"
+(
+  export HOME="$LOGIN_HOME" MYBASH_SETUP_LIB_ONLY=1 PATH="$BAT_TEST_DIR:/usr/bin:/bin"
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  # shellcheck disable=SC2034 # Consumed by the sourced setup function.
+  OS_NAME=Linux
+  ensure_login_profile_sources_bashrc
+  ensure_login_profile_sources_bashrc
+  verify_interactive_cat_alias >/dev/null
+)
+# shellcheck disable=SC2016 # Match the literal profile command.
+grep -Fq '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile" || fail 'Linux login profile does not source .bashrc'
+# shellcheck disable=SC2016 # Match the literal profile command.
+[[ $(grep -Fc '. "$HOME/.bashrc"' "$LOGIN_HOME/.profile") -eq 1 ]] || fail 'login profile sources .bashrc more than once'
+
+# Respect Bash profile precedence and recognize the common ${HOME}/.bashrc form.
+PROFILE_HOME="$TMPDIR/bash-profile-home"
+mkdir -p "$PROFILE_HOME"
+# shellcheck disable=SC2016 # Write the literal ${HOME} profile form.
+printf '%s\n' '. "${HOME}/.bashrc"' >"$PROFILE_HOME/.bash_profile"
+(
+  export HOME="$PROFILE_HOME" MYBASH_SETUP_LIB_ONLY=1
+  # shellcheck source=/dev/null
+  . "$ROOT/setup.sh"
+  # shellcheck disable=SC2034 # Consumed by the sourced setup function.
+  OS_NAME=Linux
+  ensure_login_profile_sources_bashrc
+)
+[[ $(grep -c '\.bashrc' "$PROFILE_HOME/.bash_profile") -eq 1 ]] || fail 'existing bash profile received a duplicate .bashrc source block'
+[[ ! -e $PROFILE_HOME/.profile ]] || fail 'setup ignored existing .bash_profile precedence'
 
 printf 'SECDOC theme contract passed.\n'

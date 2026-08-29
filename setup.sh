@@ -325,11 +325,18 @@ link_file() {
 	print_colored "$GREEN" "Linked $target"
 }
 
-ensure_bash_profile_sources_bashrc() {
-	[ "$OS_NAME" = Darwin ] || return 0
+ensure_login_profile_sources_bashrc() {
+	if [ -f "$HOME/.bash_profile" ]; then
+		profile=$HOME/.bash_profile
+	elif [ -f "$HOME/.bash_login" ]; then
+		profile=$HOME/.bash_login
+	elif [ "$OS_NAME" = Darwin ]; then
+		profile=$HOME/.bash_profile
+	else
+		profile=$HOME/.profile
+	fi
 
-	profile=$HOME/.bash_profile
-	if [ -f "$profile" ] && grep -q 'HOME/.bashrc' "$profile"; then
+	if [ -f "$profile" ] && grep -Eq '(HOME\}?|~)/\.bashrc' "$profile"; then
 		return 0
 	fi
 
@@ -339,7 +346,29 @@ ensure_bash_profile_sources_bashrc() {
 		printf '%s\n' ". \"\$HOME/.bashrc\""
 		printf 'fi\n'
 	} >>"$profile"
-	print_colored "$GREEN" "Updated $profile to source .bashrc"
+	print_colored "$GREEN" "Updated $profile to source .bashrc in login shells"
+}
+
+verify_interactive_cat_alias() {
+	if command_exists batcat; then
+		expected="batcat --paging=never --style=plain"
+	elif command_exists bat; then
+		expected="bat --paging=never --style=plain"
+	else
+		print_colored "$RED" "bat was installed, but neither batcat nor bat is available in PATH."
+		return 1
+	fi
+
+	alias_output=$(bash --noprofile --rcfile "$HOME/.bashrc" -ic 'alias cat' 2>/dev/null || true)
+	case $alias_output in
+	*"$expected"*)
+		print_colored "$GREEN" "Verified interactive cat alias: $expected"
+		;;
+	*)
+		print_colored "$RED" "The interactive cat alias was not loaded from $HOME/.bashrc."
+		return 1
+		;;
+	esac
 }
 
 ensure_bash_profile_brew_shellenv() {
@@ -381,13 +410,16 @@ install_configs() {
 	STARSHIP_CONFIG="$HOME/.config/starship.toml" STARSHIP_THEME_BASE="$MYBASHDIR/starship.toml" "$MYBASHDIR/starship-theme" secdoc
 	ensure_homebrew_bash_macos
 	ensure_bash_profile_brew_shellenv
-	ensure_bash_profile_sources_bashrc
+	ensure_login_profile_sources_bashrc
+	verify_interactive_cat_alias
 }
 
-install_dependencies
-install_starship_linux
-install_nerd_font_linux
-install_configs
-configure_terminal_font_linux
+if [ "${MYBASH_SETUP_LIB_ONLY:-0}" -eq 0 ]; then
+	install_dependencies
+	install_starship_linux
+	install_nerd_font_linux
+	install_configs
+	configure_terminal_font_linux
 
-print_colored "$GREEN" "Installation complete. Restart your shell or run: source ~/.bashrc"
+	print_colored "$GREEN" "Installation complete. Restart your shell or run: source ~/.bashrc"
+fi
