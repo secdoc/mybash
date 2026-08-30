@@ -35,8 +35,14 @@ for color in 161616 3B3B3B 555555 FFCC57 EF802F DB5192; do
   grep -Fq "#$color" "$TMPDIR/starship.toml" || fail "generated Starship config lacks #$color"
 done
 
-# Fastfetch keeps the dense Pop!_OS two-column system inventory.
-assert_contains config.jsonc '"source": "popos"'
+# Fastfetch keeps the dense two-column inventory while selecting the builtin
+# ASCII logo from the operating system detected at runtime. A fixed `source`
+# would force every Linux distribution and macOS host to display one OS logo.
+assert_contains config.jsonc '"type": "auto"'
+if grep -Eq '"source"[[:space:]]*:' "$ROOT/config.jsonc"; then
+  fail 'Fastfetch logo source must remain unset for OS auto-detection'
+fi
+assert_contains config.jsonc '"color": { "1": "yellow", "2": "red" }'
 for module in title host cpu gpu disk memory swap sound display localip netio wifi de wm shell terminal os kernel packages uptime; do
   grep -Eq "\"type\"[[:space:]]*:[[:space:]]*\"$module\"" "$ROOT/config.jsonc" || fail "Fastfetch lacks $module"
 done
@@ -72,6 +78,7 @@ assert_contains .github/FUNDING.yml 'github: secdoc'
 assert_contains README.md 'https://github.com/secdoc/mybash.git'
 assert_contains README.md 'ChrisTitusTech/mybash'
 assert_contains README.md 'starship-theme secdoc'
+assert_contains README.md 'auto-detected operating-system ASCII logo'
 assert_contains README.md 'full disk mount-point labels'
 assert_contains README.md 'batcat'
 

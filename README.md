@@ -6,7 +6,7 @@
 
 This is the SECDOC downstream distribution of [ChrisTitusTech/mybash](https://github.com/ChrisTitusTech/mybash). It tracks current upstream behavior while retaining SECDOC's nano preference, funding metadata, dense Fastfetch layout, Alacritty profile, and branded prompt. Upstream authorship and the MIT license are preserved.
 
-The default SECDOC presentation uses the Pop!_OS slash-and-76 ASCII logo in a high-density two-column Fastfetch layout. It reports host, hardware, storage with full disk mount-point labels, memory, audio, displays, network, COSMIC desktop, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
+The default SECDOC presentation uses Fastfetch's auto-detected operating-system ASCII logo in a high-density two-column layout. Pop!_OS systems retain the slash-and-76 logo shown in the screenshot, while other Linux distributions and macOS render the matching builtin logo for the detected operating system. The SECDOC yellow and orange logo overrides remain consistent across platforms. The inventory reports host, hardware, storage with full disk mount-point labels, memory, audio, displays, network, desktop environment, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
 
 ## Table of Contents
 
@@ -125,7 +125,7 @@ The `starship.toml` file configures the [Starship](https://starship.rs/) prompt,
 
 The `config.jsonc` file configures [fastfetch](https://github.com/AlexRogalskiy/fastfetch), a system information tool. It includes:
 
-- **Logo and Display Settings**: Customizes the appearance of system logos and separators
+- **Logo and Display Settings**: Auto-detects the operating system's builtin ASCII logo while applying SECDOC colors, padding, and separators
 - **Modules**: Defines which system information modules to display, such as CPU, GPU, OS, kernel, and uptime
 - **Custom Sections**: Adds custom formatted sections for hardware and software information
 
