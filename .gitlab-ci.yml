@@ -29,7 +29,7 @@ bash-lint-and-theme:
       printf '%s\n' 'deb https://nexus.secdoc.home/repository/debian-security trixie-security main' >> "$work/sources.list"
       chmod 0600 "$work/apt-auth.conf"
       chmod 0644 "$work/99secdoc-ca" "$work/sources.list"
-      podman run --rm --userns=keep-id \
+      podman run --rm \
         -v "$CI_PROJECT_DIR:/workspace" \
         -v "$NEXUS_CA:$NEXUS_CA:ro" \
         -v "$work/99secdoc-ca:/etc/apt/apt.conf.d/99secdoc-ca:ro" \
