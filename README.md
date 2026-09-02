@@ -8,9 +8,14 @@ This is the SECDOC downstream distribution of [ChrisTitusTech/mybash](https://gi
 
 The default SECDOC presentation uses Fastfetch's auto-detected operating-system ASCII logo in a high-density two-column layout. Pop!_OS systems retain the slash-and-76 logo shown in the screenshot, while other Linux distributions and macOS render the matching builtin logo for the detected operating system. The SECDOC yellow and orange logo overrides remain consistent across platforms. The inventory reports host, hardware, storage with full disk mount-point labels, memory, audio, displays, network, desktop environment, shell, OS, kernel, packages, and uptime. The compact Starship prompt conditionally displays Git state, non-zero exit status, background jobs, long command duration, and time.
 
+## Continuous Integration
+
+GitLab CI runs ShellCheck and the SECDOC theme contract on the isolated `phase4-untrusted` runner. The job installs its test dependencies inside a disposable rootless Podman container through Nexus. It does not install packages on the runner host or require direct Internet access. GitHub Actions remains a downstream provider-specific check for the GitHub availability mirror.
+
 ## Table of Contents
 
 - [Installation](#installation)
+- [Continuous Integration](#continuous-integration)
 - [Switching Color Palettes](#switching-color-palettes)
 - [Uninstallation](#uninstallation)
 - [Configuration Files](#configuration-files)

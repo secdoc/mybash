@@ -1,0 +1,44 @@
+stages: [test]
+
+default:
+  tags: [phase4-untrusted]
+
+bash-lint-and-theme:
+  stage: test
+  script:
+    - |
+      set -euo pipefail
+      test -n "$NEXUS_CI_USERNAME"
+      test -n "$NEXUS_CI_PASSWORD"
+      NEXUS_HOST=nexus.secdoc.home
+      NEXUS_CA=/usr/local/share/ca-certificates/secdoc-internal-root-ca.crt
+      IMAGE="$NEXUS_HOST/docker-hub/library/debian:13-slim"
+      test -s "$NEXUS_CA"
+      work=$(mktemp -d)
+      cleanup() {
+        rm -rf "$work"
+        podman image rm -f "$IMAGE" >/dev/null 2>&1 || true
+        podman logout "$NEXUS_HOST" >/dev/null 2>&1 || true
+      }
+      trap cleanup EXIT
+      printf '%s' "$NEXUS_CI_PASSWORD" | podman login --username "$NEXUS_CI_USERNAME" --password-stdin "$NEXUS_HOST"
+      podman pull "$IMAGE"
+      printf 'Acquire::https::CaInfo "%s";\n' "$NEXUS_CA" > "$work/99secdoc-ca"
+      printf 'machine %s\nlogin %s\npassword %s\n' "$NEXUS_HOST" "$NEXUS_CI_USERNAME" "$NEXUS_CI_PASSWORD" > "$work/apt-auth.conf"
+      printf '%s\n' 'deb https://nexus.secdoc.home/repository/debian-main trixie main' > "$work/sources.list"
+      printf '%s\n' 'deb https://nexus.secdoc.home/repository/debian-security trixie-security main' >> "$work/sources.list"
+      chmod 0600 "$work/apt-auth.conf"
+      chmod 0644 "$work/99secdoc-ca" "$work/sources.list"
+      podman run --rm --userns=keep-id \
+        -v "$CI_PROJECT_DIR:/workspace" \
+        -v "$NEXUS_CA:$NEXUS_CA:ro" \
+        -v "$work/99secdoc-ca:/etc/apt/apt.conf.d/99secdoc-ca:ro" \
+        -v "$work/apt-auth.conf:/etc/apt/auth.conf.d/nexus.conf:ro" \
+        -v "$work/sources.list:/etc/apt/sources.list:ro" \
+        -w /workspace \
+        "$IMAGE" \
+        bash -c 'set -eu; rm -f /etc/apt/sources.list.d/debian.sources; apt-get update -qq; apt-get install -y --no-install-recommends bash bat shellcheck util-linux >/dev/null; find . -name "*.sh" -print0 | xargs -0 shellcheck -f gcc | tee shellcheck.log; if grep -q "error:" shellcheck.log; then exit 1; fi; bash tests/test_secdoc_theme.sh; sh tests/test_gitlab_ci_contract.sh'
+  artifacts:
+    when: always
+    expire_in: 1 day
+    paths: [shellcheck.log]
