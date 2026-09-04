@@ -10,7 +10,7 @@ The default SECDOC presentation uses Fastfetch's auto-detected operating-system 
 
 ## Continuous Integration
 
-GitLab CI runs ShellCheck and the SECDOC theme contract on the isolated `phase4-untrusted` runner. The job installs its test dependencies inside a disposable rootless Podman container through Nexus. It does not install packages on the runner host or require direct Internet access. GitHub Actions remains a downstream provider-specific check for the GitHub availability mirror.
+GitLab CI runs ShellCheck and the theme contract inside a disposable rootless Podman container. The public pipeline uses a standard Debian image by default and permits a deployment-specific mirror through `CI_CONTAINER_IMAGE`; it contains no private registry, runner, credential, or CA references. GitHub Actions remains a downstream provider-specific check for the GitHub availability mirror.
 
 ## Table of Contents
 

@@ -116,11 +116,11 @@ command -v script >/dev/null 2>&1 || fail 'script is required for the pseudo-ter
 RENDER_HOME="$TMPDIR/render-home"
 mkdir -p "$RENDER_HOME/bin"
 ln -s "$REAL_BAT" "$RENDER_HOME/bin/$(basename "$REAL_BAT")"
-printf '%s\n' 'PING 192.168.88.1 (192.168.88.1)' '64 bytes from 192.168.88.1' >"$RENDER_HOME/ping.txt"
+printf '%s\n' 'PING 192.0.2.1 (192.0.2.1)' '64 bytes from 192.0.2.1' >"$RENDER_HOME/ping.txt"
 render_output=$(TERM=xterm-256color PATH="$RENDER_HOME/bin:/usr/bin:/bin" HOME="$RENDER_HOME" \
   script -qec "bash --noprofile --rcfile '$ROOT/.bashrc' -ic 'cat \"$RENDER_HOME/ping.txt\"'" /dev/null 2>/dev/null)
 [[ $render_output == *'ping.txt'* ]] || fail 'interactive cat rendering lacks the bat file header'
-[[ $render_output == *'1'*'PING 192.168.88.1'* ]] || fail 'interactive cat rendering lacks bat line numbers/grid'
+[[ $render_output == *'1'*'PING 192.0.2.1'* ]] || fail 'interactive cat rendering lacks bat line numbers/grid'
 [[ $render_output == *$'\033['* ]] || fail 'interactive cat rendering lacks terminal color escapes'
 
 # Aliases do not expand in non-interactive Bash, and command cat bypasses them interactively.
