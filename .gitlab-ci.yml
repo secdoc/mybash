@@ -1,5 +1,8 @@
 stages: [test]
 
+default:
+  tags: ["${CI_RUNNER_TAG}"]
+
 bash-lint-and-theme:
   stage: test
   script:
