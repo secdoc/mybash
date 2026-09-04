@@ -10,7 +10,7 @@ The default SECDOC presentation uses Fastfetch's auto-detected operating-system 
 
 ## Continuous Integration
 
-GitLab CI runs ShellCheck and the theme contract inside a disposable rootless Podman container. The public pipeline uses a standard Debian image by default and permits a deployment-specific mirror through `CI_CONTAINER_IMAGE`; it contains no private registry, runner, credential, or CA references. GitHub Actions remains a downstream provider-specific check for the GitHub availability mirror.
+GitLab CI validates tracked JSON, Python, and shell syntax, then runs a network-independent high-confidence secret scan across full Git history. The public pipeline contains no private registry, runner, credential, CA, or internal-domain reference.
 
 ## Table of Contents
 
